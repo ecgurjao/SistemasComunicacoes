@@ -1,6 +1,6 @@
 # SistemasComunicacoes
 
-Séria de *notebooks* com antoções sobre Sistemas de Comunicações.
+Série de *notebooks* com antoções sobre Sistemas de Comunicações.
 
 Os assuntos são apresentados como blocos blocos funcionais que ao serem conectados formam um sistema de comunicações.
 
