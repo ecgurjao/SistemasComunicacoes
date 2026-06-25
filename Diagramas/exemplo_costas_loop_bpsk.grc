@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='utf-8'?>
+<flow_graph>
+  <timestamp>Thu Jun 25 2026</timestamp>
+  <block>
+    <key>options</key>
+    <param><key>id</key><value>costas_loop_bpsk_demo</value></param>
+    <param><key>title</key><value>Exemplo demonstrativo de Costas Loop para BPSK no GNU Radio</value></param>
+    <param><key>author</key><value></value></param>
+    <param><key>description</key><value>Gera um sinal BPSK simples, aplica um desvio de frequência de portadora e usa o Costas Loop para recuperar fase/frequência. Compare as constelações antes e depois do Costas Loop.</value></param>
+    <param><key>category</key><value>[GRC Hier Blocks]</value></param>
+    <param><key>generate_options</key><value>qt_gui</value></param>
+    <param><key>hier_block_src_path</key><value>.:</value></param>
+    <param><key>qt_qss_theme</key><value></value></param>
+    <param><key>run_options</key><value>prompt</value></param>
+    <param><key>run</key><value>True</value></param>
+    <param><key>max_nouts</key><value>0</value></param>
+    <param><key>realtime_scheduling</key><value></value></param>
+  </block>
+
+  <block>
+    <key>variable</key>
+    <param><key>id</key><value>samp_rate</value></param>
+    <param><key>value</key><value>32000</value></param>
+  </block>
+
+  <block>
+    <key>variable</key>
+    <param><key>id</key><value>sym_rate</value></param>
+    <param><key>value</key><value>1000</value></param>
+  </block>
+
+  <block>
+    <key>variable_qtgui_range</key>
+    <param><key>id</key><value>freq_offset</value></param>
+    <param><key>label</key><value>Desvio de frequência da portadora (Hz)</value></param>
+    <param><key>default_value</key><value>600</value></param>
+    <param><key>start</key><value>-1500</value></param>
+    <param><key>stop</key><value>1500</value></param>
+    <param><key>step</key><value>10</value></param>
+    <param><key>widget</key><value>counter_slider</value></param>
+    <param><key>orient</key><value>Qt.Horizontal</value></param>
+  </block>
+
+  <block>
+    <key>variable_qtgui_range</key>
+    <param><key>id</key><value>loop_bw</value></param>
+    <param><key>label</key><value>Largura de banda do Costas Loop</value></param>
+    <param><key>default_value</key><value>0.0628</value></param>
+    <param><key>start</key><value>0.005</value></param>
+    <param><key>stop</key><value>0.2</value></param>
+    <param><key>step</key><value>0.005</value></param>
+    <param><key>widget</key><value>counter_slider</value></param>
+    <param><key>orient</key><value>Qt.Horizontal</value></param>
+  </block>
+
+  <block>
+    <key>analog_sig_source_x</key>
+    <param><key>id</key><value>analog_sig_source_data</value></param>
+    <param><key>type</key><value>float</value></param>
+    <param><key>samp_rate</key><value>samp_rate</value></param>
+    <param><key>waveform</key><value>analog.GR_SQR_WAVE</value></param>
+    <param><key>freq</key><value>sym_rate/8</value></param>
+    <param><key>amp</key><value>1</value></param>
+    <param><key>offset</key><value>0</value></param>
+    <param><key>phase</key><value>0</value></param>
+  </block>
+
+  <block>
+    <key>blocks_float_to_complex</key>
+    <param><key>id</key><value>blocks_float_to_complex_0</value></param>
+    <param><key>vlen</key><value>1</value></param>
+  </block>
+
+  <block>
+    <key>analog_sig_source_x</key>
+    <param><key>id</key><value>analog_sig_source_carrier_offset</value></param>
+    <param><key>type</key><value>complex</value></param>
+    <param><key>samp_rate</key><value>samp_rate</value></param>
+    <param><key>waveform</key><value>analog.GR_COS_WAVE</value></param>
+    <param><key>freq</key><value>freq_offset</value></param>
+    <param><key>amp</key><value>1</value></param>
+    <param><key>offset</key><value>0</value></param>
+    <param><key>phase</key><value>0.7</value></param>
+  </block>
+
+  <block>
+    <key>blocks_multiply_xx</key>
+    <param><key>id</key><value>blocks_multiply_xx_0</value></param>
+    <param><key>type</key><value>complex</value></param>
+    <param><key>num_inputs</key><value>2</value></param>
+    <param><key>vlen</key><value>1</value></param>
+  </block>
+
+  <block>
+    <key>blocks_throttle</key>
+    <param><key>id</key><value>blocks_throttle_0</value></param>
+    <param><key>type</key><value>complex</value></param>
+    <param><key>samples_per_second</key><value>samp_rate</value></param>
+    <param><key>ignoretag</key><value>True</value></param>
+  </block>
+
+  <block>
+    <key>digital_costas_loop_cc</key>
+    <param><key>id</key><value>digital_costas_loop_cc_0</value></param>
+    <param><key>loop_bw</key><value>loop_bw</value></param>
+    <param><key>order</key><value>2</value></param>
+    <param><key>use_snr</key><value>False</value></param>
+  </block>
+
+  <block>
+    <key>qtgui_const_sink_x</key>
+    <param><key>id</key><value>qtgui_const_sink_x_0</value></param>
+    <param><key>type</key><value>complex</value></param>
+    <param><key>name</key><value>Constelação antes do Costas Loop</value></param>
+    <param><key>size</key><value>1024</value></param>
+    <param><key>nconnections</key><value>1</value></param>
+    <param><key>gui_hint</key><value></value></param>
+  </block>
+
+  <block>
+    <key>qtgui_const_sink_x</key>
+    <param><key>id</key><value>qtgui_const_sink_x_1</value></param>
+    <param><key>type</key><value>complex</value></param>
+    <param><key>name</key><value>Constelação após o Costas Loop</value></param>
+    <param><key>size</key><value>1024</value></param>
+    <param><key>nconnections</key><value>1</value></param>
+    <param><key>gui_hint</key><value></value></param>
+  </block>
+
+  <block>
+    <key>qtgui_freq_sink_x</key>
+    <param><key>id</key><value>qtgui_freq_sink_x_0</value></param>
+    <param><key>type</key><value>complex</value></param>
+    <param><key>name</key><value>Espectro do BPSK com offset</value></param>
+    <param><key>fftsize</key><value>1024</value></param>
+    <param><key>wintype</key><value>window.WIN_BLACKMAN_hARRIS</value></param>
+    <param><key>fc</key><value>0</value></param>
+    <param><key>bw</key><value>samp_rate</value></param>
+    <param><key>nconnections</key><value>1</value></param>
+    <param><key>gui_hint</key><value></value></param>
+  </block>
+
+  <connection>
+    <source_block_id>analog_sig_source_data</source_block_id>
+    <sink_block_id>blocks_float_to_complex_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_float_to_complex_0</source_block_id>
+    <sink_block_id>blocks_multiply_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>analog_sig_source_carrier_offset</source_block_id>
+    <sink_block_id>blocks_multiply_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_multiply_xx_0</source_block_id>
+    <sink_block_id>blocks_throttle_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_throttle_0</source_block_id>
+    <sink_block_id>digital_costas_loop_cc_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_throttle_0</source_block_id>
+    <sink_block_id>qtgui_const_sink_x_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>blocks_throttle_0</source_block_id>
+    <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>digital_costas_loop_cc_0</source_block_id>
+    <sink_block_id>qtgui_const_sink_x_1</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+</flow_graph>
